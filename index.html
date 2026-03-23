@@ -831,7 +831,7 @@ SECTION 2B — POLYMARKET MICROSTRUCTURE (v7 NEW)
 ===================================================
 TRADE FLOW ANALYSIS (most powerful edge):
 - Net buyer pressure = (buy_trades/total_trades)*100. >65% = strong YES signal
-- Whale trades (>$500 size) have 72% accuracy — follow them
+- Whale trades (>$200 size) have 72% accuracy — follow them
 - Price moving up with low volume = weak signal (fade it)
 - Price moving up with high volume (>2x avg) = strong signal (follow it)
 - Last-minute price spikes (within 6h of resolution) = resolution info leak → HIGH VALUE
@@ -1022,7 +1022,7 @@ async function fetchRecentTrades(tokenId) {
 function analyzeTradeFlow(trades) {
   if (!trades || !trades.length) return { buyPct:50, sellPct:50, whaleCount:0, netFlow:'NEUTRAL', pressure:0 };
   let buys=0, sells=0, whaleBuys=0, whaleSells=0;
-  const WHALE_SIZE = 200; // $200+ = whale
+  const WHALE_SIZE = 200; // $200+ = whale (configurable: set higher for stricter whale detection)
   trades.forEach(t => {
     const size = parseFloat(t.size||t.amount||0);
     const side = (t.side||t.maker_asset_id||'').toUpperCase();
@@ -2389,7 +2389,7 @@ window.onload = () => {
   setInterval(fetchPrices, 30000);
   initCryptoPanel();
   ['bankroll','ptarget'].forEach(id => document.getElementById(id).addEventListener('input', updatePT));
-  toast('info','ORACLE QUANT v6 Online',
+  toast('info','ORACLE QUANT v7 Online',
     'v7 GOD MODE: Trade Flow Analysis · Whale Detection · Compound Kelly · $5→$30 Mission · GOLD/SILVER signal tiers · 99% accuracy protocol · Claude Opus ultra mode',
     'info');
 };
