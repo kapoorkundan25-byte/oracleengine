@@ -2,12 +2,35 @@
 
 **Self-Learning · 2-Hour $5→$30 Mission · 24/7 · Live Polymarket AI · 99% Accuracy Protocol**
 
+> **🟢 LIVE URL:** `https://kapoorkundan25-byte.github.io/oracleengine/`
+>
+> Auto-deploys from `main` via GitHub Actions every time code is pushed.
+
 A single-page AI-powered prediction intelligence platform that:
 - Connects to Polymarket live markets (Gamma + CLOB APIs)
 - Analyzes real trade flow and whale activity
 - Uses the paid Claude API (Sonnet/Opus) for deep Bayesian analysis
 - Automatically self-learns by updating signal weights via Brier-score every 10 trades
 - Runs a compound-Kelly bot targeting $5→$30 in 2 hours
+
+---
+
+## ⚡ Quick Start — Activate Live Deployment
+
+This repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that publishes the app to GitHub Pages automatically.
+
+**One-time setup (do this once after the PR is merged):**
+
+1. Go to **[github.com/kapoorkundan25-byte/oracleengine/settings/pages](https://github.com/kapoorkundan25-byte/oracleengine/settings/pages)**
+2. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
+3. Click **Save**
+4. The next push to `main` triggers the workflow and the app goes live at:
+   ```
+   https://kapoorkundan25-byte.github.io/oracleengine/
+   ```
+5. You can also trigger it manually: **Actions → Deploy Oracle Quant v8 → Run workflow**
+
+**After that it's fully automatic** — every commit to `main` redeploys within ~1 minute.
 
 ---
 
@@ -63,7 +86,7 @@ A single-page AI-powered prediction intelligence platform that:
 | **CLOB Trade Flow** | Real-time buyer/seller pressure from last 50 trades |
 | **Whale Detection** | Identifies accumulation/distribution by large traders (>$200) |
 | **99% Accuracy Protocol** | GOLD/SILVER/BRONZE signal tiers — only enter when 3+ signals align |
-| **🆕 2-Hour Mission** | Bot timer extended to 2 hours for $5→$30 compound growth |
+| **🆕 2-Hour Mission** | Bot timer extended from 1 hour (v7) to 2 hours for $5→$30 compound growth |
 | **🆕 Self-Learning AI** | Brier-score weight auto-update every 10 trades — gets smarter over time |
 | **🆕 24/7 Mode** | `∞ 24/7` toggle: scanner restarts automatically after each cycle |
 | **🆕 Deploy Guide** | In-app modal with step-by-step free hosting + privacy instructions |
