@@ -15,14 +15,11 @@
   # No build command — index.html is pre-built static HTML
   publish = "."   # publish the root directory where index.html is located
 
-# ── Security / performance headers ───────────────────────
+# ── Security headers ──────────────────────────────────────
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options        = "DENY"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy        = "strict-origin-when-cross-origin"
-    Permissions-Policy     = "geolocation=(), microphone=(), camera=()"
 
 # ── SPA / single-page-app fallback ───────────────────────
 # Ensures index.html is served for all routes (future-proofing).
