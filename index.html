@@ -421,9 +421,36 @@ canvas#cryptoChart{display:block;width:100%!important;}
 .t-tb{font-size:8px;color:#3a6070;line-height:1.4;}
 
 ::-webkit-scrollbar{width:2px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--b2);}
+
+/* ═══ SETUP MODAL ═══ */
+#setupModal{position:fixed;inset:0;z-index:99999;background:rgba(2,4,7,0.96);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+#setupModal.hidden{display:none;}
+.setup-box{background:var(--s2);border:1px solid var(--g);max-width:480px;width:92%;padding:32px 28px;position:relative;}
+.setup-box h2{font-family:'Syne';font-size:18px;font-weight:800;color:var(--g);letter-spacing:3px;margin-bottom:6px;}
+.setup-box p{font-family:'JetBrains Mono';font-size:10px;color:var(--t);line-height:1.7;margin-bottom:18px;}
+.setup-box .note{font-size:8px;color:var(--m);margin-top:10px;line-height:1.6;}
+.setup-inp{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--b2);color:var(--g);font-family:'JetBrains Mono';font-size:11px;outline:none;letter-spacing:1px;margin-bottom:14px;}
+.setup-inp:focus{border-color:var(--g);}
+.setup-inp::placeholder{color:var(--m);}
+.setup-save{width:100%;padding:10px;background:var(--g3);border:1px solid var(--g);color:var(--g);font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;}
+.setup-save:hover{background:rgba(0,255,179,0.2);}
+.setup-skip{display:block;text-align:center;margin-top:12px;font-family:'JetBrains Mono';font-size:8px;color:var(--m);cursor:pointer;letter-spacing:1px;text-decoration:underline;}
+.setup-skip:hover{color:var(--t);}
 </style>
 </head>
 <body>
+
+<!-- ONE-TIME API KEY SETUP MODAL -->
+<div id="setupModal" class="hidden">
+  <div class="setup-box">
+    <h2>⚡ ONE-TIME SETUP</h2>
+    <p>Enter your Anthropic Claude API key once.<br>It will be saved locally in your browser and auto-load on every future visit — no re-entry needed.</p>
+    <input class="setup-inp" id="setupKey" type="password" placeholder="sk-ant-api03-..." autocomplete="off">
+    <button class="setup-save" onclick="setupSaveKey()">✓ SAVE KEY &amp; START 24/7</button>
+    <p class="note">🔒 Your key is stored only in your browser (localStorage). It is never sent to any third-party server.<br>Get your key at <b>console.anthropic.com</b> → API Keys.</p>
+    <span class="setup-skip" onclick="setupSkip()">Skip for now (you can paste your key in the bar above)</span>
+  </div>
+</div>
 <div id="app">
 
 <!-- LIVE TICKER -->
@@ -1829,6 +1856,32 @@ function setKeyStatus(ok) {
   el.style.color = ok ? 'var(--g)' : 'var(--r)';
 }
 
+// ── Setup modal ─────────────────────────────────────────
+function showSetupModal() {
+  const m = document.getElementById('setupModal');
+  if (m) m.classList.remove('hidden');
+}
+function hideSetupModal() {
+  const m = document.getElementById('setupModal');
+  if (m) m.classList.add('hidden');
+}
+function setupSaveKey() {
+  const k = document.getElementById('setupKey').value.trim();
+  if (!k.startsWith('sk-ant-api')) { alert('Key must start with sk-ant-api...'); return; }
+  STATE.key = k;
+  let saved = false;
+  try { localStorage.setItem('oq6_key', k); saved = true; } catch(e) {
+    alert('Could not save key to localStorage (private browsing or storage disabled). Your key will work this session only.');
+  }
+  setKeyStatus(true);
+  document.getElementById('apiKey').placeholder = saved ? '✓ Key saved — auto-loads every visit' : '✓ Key active (not persisted)';
+  hideSetupModal();
+  toast('info','Setup Complete', saved ? 'API key saved · Auto-loads on every future visit · 24/7 Ready' : 'Key active this session only · localStorage unavailable', 'info');
+}
+function setupSkip() {
+  hideSetupModal();
+}
+
 // ═══════════════════════════════════════════════════════════════
 // KELLY + DEPTH
 // ═══════════════════════════════════════════════════════════════
@@ -2470,6 +2523,10 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 // ═══════════════════════════════════════════════════════════════
 window.onload = () => {
   loadPersist();
+  // Show one-time setup modal if no API key is saved yet
+  if (!STATE.key) {
+    setTimeout(showSetupModal, 600);
+  }
   renderWeights();
   loadMarkets();
   updatePT();
