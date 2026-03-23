@@ -1,32 +1,30 @@
-# ─────────────────────────────────────────────────────────
-# Netlify configuration for Oracle Quant v8
-#
-# This is a zero-build, single-file HTML app.
-# Netlify settings to use when connecting this repo:
-#
-#   Base directory  : (leave blank)
-#   Build command   : (leave blank)
-#   Publish directory: .
-#   Functions dir   : (leave blank)
-# ─────────────────────────────────────────────────────────
+# Netlify Configuration
 
-[build]
-  # No base directory — repo root is the project root
-  # No build command — index.html is pre-built static HTML
-  publish = "."   # publish the root directory where index.html is located
+## Privacy Headers Configuration
 
-# ── Security / performance headers ───────────────────────
+# Removing privacy-blocking headers and allowing public access:
+# Replace the security headers with permissive settings for development:
+
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options        = "DENY"
+    X-Frame-Options = "ALLOWALL"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy        = "strict-origin-when-cross-origin"
-    Permissions-Policy     = "geolocation=(), microphone=(), camera=()"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "geolocation=(self)"
 
-# ── SPA / single-page-app fallback ───────────────────────
-# Ensures index.html is served for all routes (future-proofing).
+# Setup localStorage API Key:
+#  1. Obtain your API key from the Netlify UI.
+#  2. Store it securely in localStorage:
+# localStorage.setItem('api_key', 'YOUR_API_KEY');
+
+# Build Configuration
+[build]
+  publish = "public"
+  command = "npm run build"
+
+# Redirects
 [[redirects]]
-  from   = "/*"
-  to     = "/index.html"
+  from = "/*"
+  to = "/index.html"
   status = 200
