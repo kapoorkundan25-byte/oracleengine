@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var siteTitle = ViewData["SiteTitle"]?.ToString() ?? "OracleEngine";
+    var siteDescription = ViewData["SiteDescription"]?.ToString() ?? "";
+    var welcomeMessage = ViewData["WelcomeMessage"]?.ToString() ?? "";
+    var contactEmail = ViewData["ContactEmail"]?.ToString();
+}
+
+<div class="text-center">
+    <h1 class="display-4">@siteTitle</h1>
+    <p class="lead">@siteDescription</p>
+</div>
+
+<hr />
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <p class="card-text fs-5">@welcomeMessage</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(contactEmail))
+{
+    <div class="text-center mt-4">
+        <p class="text-muted">
+            Contact us: <a href="mailto:@contactEmail">@contactEmail</a>
+        </p>
+    </div>
+}

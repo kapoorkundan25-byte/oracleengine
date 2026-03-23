@@ -1,0 +1,75 @@
+@model OracleEngine.Models.SiteSettingsViewModel
+@{
+    ViewData["Title"] = "Admin Settings";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>⚙️ Site Settings</h2>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-sm">← View Site</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string successMsg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ✅ @successMsg
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form asp-action="Settings" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <h5 class="card-title mb-3 border-bottom pb-2">Public Content</h5>
+
+            <div class="mb-3">
+                <label asp-for="SiteTitle" class="form-label fw-semibold"></label>
+                <input asp-for="SiteTitle" class="form-control" />
+                <span asp-validation-for="SiteTitle" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SiteDescription" class="form-label fw-semibold"></label>
+                <textarea asp-for="SiteDescription" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="SiteDescription" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="WelcomeMessage" class="form-label fw-semibold"></label>
+                <textarea asp-for="WelcomeMessage" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="WelcomeMessage" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ContactEmail" class="form-label fw-semibold"></label>
+                <input asp-for="ContactEmail" class="form-control" type="email" />
+                <span asp-validation-for="ContactEmail" class="text-danger small"></span>
+            </div>
+
+            <h5 class="card-title mb-3 border-bottom pb-2">Change Admin Password</h5>
+            <p class="text-muted small">Leave blank to keep the current password.</p>
+
+            <div class="mb-3">
+                <label asp-for="NewAdminPassword" class="form-label fw-semibold"></label>
+                <input asp-for="NewAdminPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="NewAdminPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ConfirmNewPassword" class="form-label fw-semibold"></label>
+                <input asp-for="ConfirmNewPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-dark btn-lg">💾 Save Settings</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
