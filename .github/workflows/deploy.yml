@@ -1,0 +1,67 @@
+# ════════════════════════════════════════════════════════════════
+# Oracle Quant v8 — Auto-Deploy to GitHub Pages
+#
+# Triggers on every push to `main`.
+# Deploys the single-file index.html as a live 24/7 web app.
+#
+# After merging your PR, go to:
+#   Repository → Settings → Pages
+#   Source: GitHub Actions   (select this option)
+# Your site will appear at:
+#   https://kapoorkundan25-byte.github.io/oracleengine/
+# ════════════════════════════════════════════════════════════════
+name: Deploy Oracle Quant v8 to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  # Allow manual trigger from the Actions tab
+  workflow_dispatch:
+
+# Grant the GITHUB_TOKEN the permissions needed to deploy Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one concurrent deployment; cancel in-progress runs
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Prepare site artifact ───────────────────────────────
+      # The app is a single index.html — copy it (and .nojekyll)
+      # into the Pages upload directory.
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+          cp .nojekyll  _site/.nojekyll
+          echo "Site contents:"
+          ls -lh _site/
+
+      # ── 3. Upload artifact for Pages ───────────────────────────
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      # ── 4. Deploy to GitHub Pages ──────────────────────────────
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
