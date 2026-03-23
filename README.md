@@ -36,23 +36,39 @@ This repository includes a GitHub Actions workflow (`.github/workflows/deploy.ym
 
 ## 🚀 Deploy Live (24/7 Free Hosting)
 
-### Option 1 — Netlify Drop (Fastest · Completely Free · Works Instantly)
+### Option 1 — Netlify (Connect GitHub — Auto-Deploys on Every Push) ⭐ Recommended
 
-1. Go to **[netlify.com](https://netlify.com)** → sign up free (use GitHub login)
-2. Go to **[app.netlify.com/drop](https://app.netlify.com/drop)**
-3. Drag & drop your `index.html` file onto the page
-4. You get a URL like `oracle-abc123.netlify.app` instantly
+This repo ships a `netlify.toml` that pre-configures all settings automatically.
+Just connect the repo and hit Deploy — no field values to enter.
+
+**If Netlify still asks you for fields, use these exact values:**
+
+| Netlify field | Value |
+|---|---|
+| **Base directory** | *(leave blank)* |
+| **Build command** | *(leave blank)* |
+| **Publish directory** | `.` ← a single dot |
+| **Functions directory** | *(leave blank)* |
+
+**Steps:**
+1. Go to **[app.netlify.com](https://app.netlify.com)** → **Add new site → Import an existing project**
+2. Choose **GitHub** → authorise → select **kapoorkundan25-byte/oracleengine**
+3. Leave all build fields blank (or as shown above) → click **Deploy site**
+4. You get a URL like `oracle-abc123.netlify.app` in ~30 seconds
 5. **For privacy**: Site Settings → Access Control → Password → set a password only you know
-6. Your Claude API key is stored in **your browser only** — never exposed publicly
+6. Your Claude API key is stored in **your browser only** — never sent to Netlify
 
-### Option 2 — GitHub Pages (Free with GitHub account)
+> **Netlify Drop (no GitHub account needed):**
+> Go to **[app.netlify.com/drop](https://app.netlify.com/drop)** and drag-and-drop `index.html` directly.
 
-1. Go to **[github.com](https://github.com)** → New Repository
-2. **Set repository to PRIVATE** to hide source code from the public
-3. Upload `index.html` to the repo
-4. **Settings → Pages → Branch: main → Folder: / → Save**
-5. Your app will be at `https://username.github.io/repo-name/`
-6. *Note: GitHub Pages on private repos requires GitHub Pro ($4/mo). Use Netlify for 100% free.*
+### Option 2 — GitHub Pages (Auto-deploys via GitHub Actions — already set up)
+
+This repo already includes `.github/workflows/deploy.yml`.
+
+1. Push / merge to **`main`**
+2. Go to **Settings → Pages → Source: GitHub Actions → Save** (one-time)
+3. App goes live at `https://kapoorkundan25-byte.github.io/oracleengine/`
+4. *Note: GitHub Pages on private repos requires GitHub Pro ($4/mo). Use Netlify for 100% free.*
 
 ### Option 3 — Vercel
 
