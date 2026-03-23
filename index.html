@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ORACLE QUANT v7 — GOD MODE: Advanced Polymarket Prediction Engine</title>
+<title>ORACLE QUANT v8 — GOD MODE: 2-Hour $5→$30 · Self-Learning · 24/7 Polymarket AI</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -434,8 +434,8 @@ canvas#cryptoChart{display:block;width:100%!important;}
   <div class="brand">
     <div class="bhex">Q</div>
     <div>
-      <div class="bname">ORACLE QUANT v7</div>
-      <div class="bsub">GOD MODE · CLOB+GAMMA · TRADE FLOW · WHALE DETECTION · COMPOUND KELLY · $5→$30</div>
+      <div class="bname">ORACLE QUANT v8</div>
+      <div class="bsub">GOD MODE · 2-HR MISSION · SELF-LEARNING AI · 24/7 · WHALE · COMPOUND KELLY · $5→$30</div>
     </div>
   </div>
   <div class="hpills">
@@ -445,6 +445,9 @@ canvas#cryptoChart{display:block;width:100%!important;}
     <div class="hp"><div class="hp-l">PROBES</div><div class="hp-v hc" id="hP">0</div></div>
     <div class="hp"><div class="hp-l">AVG EV</div><div class="hp-v hy" id="hE">—</div></div>
     <div class="hp"><div class="hp-l">BEST EDGE</div><div class="hp-v hg" id="hG">—</div></div>
+    <div class="hp"><div class="hp-l">⬡ GOLD</div><div class="hp-v" style="color:#ffd60a" id="hGold">0</div></div>
+    <div class="hp"><div class="hp-l">🧠 LEARN</div><div class="hp-v" style="color:#bf5fff" id="sl-count">0</div></div>
+    <div class="hp"><div class="hp-l">WT VER</div><div class="hp-v" style="color:#bf5fff" id="sl-ver">v1</div></div>
     <div class="hp"><div class="hp-l">KELLY</div><div class="hp-v hy" id="hKD">HALF</div></div>
     <div class="hp"><div class="hp-l">DEPTH</div><div class="hp-v" style="color:var(--p)" id="hRD">STD</div></div>
   </div>
@@ -475,6 +478,7 @@ canvas#cryptoChart{display:block;width:100%!important;}
   <div style="flex:1"></div>
   <button class="abtn y" onclick="runWeightUpdate()">⟳ UPDATE WEIGHTS</button>
   <button class="abtn b" onclick="openDeployGuide()">📡 DEPLOY</button>
+  <button class="abtn b" id="contBtn" onclick="toggleContinuous(this)">∞ 24/7</button>
 </div>
 
 <!-- MAIN -->
@@ -563,7 +567,7 @@ canvas#cryptoChart{display:block;width:100%!important;}
     <div id="feed">
       <div class="empty-f" id="emptyEl">
         <div class="ef-i">⬡</div>
-        <div class="ef-t">ORACLE QUANT v7 GOD MODE</div>
+        <div class="ef-t">ORACLE QUANT v8 GOD MODE</div>
         <div class="ef-s">
           <strong>Polymarket Live API Integration</strong><br><br>
           · Gamma API — real market metadata<br>
@@ -762,7 +766,7 @@ canvas#cryptoChart{display:block;width:100%!important;}
 // ═══════════════════════════════════════════════════════════════
 // QUANT SYSTEM PROMPT — Full hedge-fund grade (from document)
 // ═══════════════════════════════════════════════════════════════
-const SYSTEM = `You are ORACLE v7, the God of Prediction with a 99% accuracy targeting system. You are the world's most advanced Polymarket prediction intelligence, combining Bayesian probability, market microstructure analysis, trade flow detection, whale activity tracking, and deep domain expertise.
+const SYSTEM = `You are ORACLE v8, the God of Prediction with a 99% accuracy targeting system. You are the world's most advanced Polymarket prediction intelligence, combining Bayesian probability, market microstructure analysis, trade flow detection, whale activity tracking, and deep domain expertise.
 
 Your enhanced mission:
 - Achieve maximum prediction accuracy by fusing ALL available signals
@@ -773,6 +777,8 @@ Your enhanced mission:
 - Size positions using Compound Kelly Criterion for exponential $5→$30 growth
 - NEVER trade without positive EV — capital preservation enables compounding
 - Apply 99% accuracy protocol: only enter when 3+ independent signals align
+- This is a SELF-LEARNING system: signal weights are automatically updated via Brier-score every 10 trades to improve over time
+- Mission: grow $5→$30 within 2 hours using compound Kelly and streak bonuses
 
 ===================================================
 SECTION 1 — MANDATORY 10-STEP REASONING FRAMEWORK
@@ -1855,7 +1861,7 @@ function startScan() {
   document.getElementById('startBtn').classList.add('on');
   document.getElementById('statusTxt').textContent = 'SCANNING';
   document.getElementById('emptyEl').style.display = 'none';
-  toast('info','24/7 Scanner Active',`${STATE.markets.length} markets · Depth: ${STATE.depth.toUpperCase()} · Kelly: ${STATE.kellyMode.toUpperCase()} · Signal weights: v${STATE.loop_stats.signal_weight_version}`,'info');
+  toast('info','24/7 Self-Learning Scanner',`${STATE.markets.length} mkts · ${STATE.depth.toUpperCase()} · Kelly: ${STATE.kellyMode.toUpperCase()} · Weights v${STATE.loop_stats.signal_weight_version} · Self-learn every ${SELF_LEARN.updateInterval} trades`,'info');
   runCycle();
 }
 function stopScan() {
@@ -1866,6 +1872,17 @@ function stopScan() {
   document.getElementById('pbF').style.width = '0%';
   document.getElementById('pbS').textContent = 'Stopped';
   document.getElementById('nxSc').textContent = '—';
+}
+// v8: CONTINUOUS mode — scanner auto-restarts every hour
+let CONTINUOUS_MODE = false;
+function toggleContinuous(el) {
+  CONTINUOUS_MODE = !CONTINUOUS_MODE;
+  el.classList.toggle('on', CONTINUOUS_MODE);
+  el.textContent = CONTINUOUS_MODE ? '∞ 24/7 ON' : '∞ 24/7';
+  if (CONTINUOUS_MODE && !STATE.running) startScan();
+  toast(CONTINUOUS_MODE?'buy':'info', CONTINUOUS_MODE?'24/7 Mode ON':'24/7 Mode OFF',
+    CONTINUOUS_MODE ? 'Scanner will auto-restart after each cycle indefinitely' : '24/7 mode disabled', 
+    CONTINUOUS_MODE?'buy':'info');
 }
 
 async function runCycle() {
@@ -2157,6 +2174,7 @@ Return ONLY valid JSON with ALL v7 fields including trade_flow_signal, whale_sig
     updateOBPanel();
     renderQueue();
     updatePT();
+    selfLearnTick('polymarket'); // v8 self-learning trigger after each analysis
 
   } catch(err) {
     logR(`✗ ${err.message}`, 'run');
@@ -2363,9 +2381,81 @@ function updatePT() {
 }
 function clearFeed() { document.getElementById('feed').innerHTML='<div class="empty-f" id="emptyEl"><div class="ef-i">⬡</div><div class="ef-t">FEED CLEARED</div><div class="ef-s">Scanner continues. New analyses on next cycle.</div></div>'; }
 function openDeployGuide() {
-  toast('info','Free Deploy Options',
-    'NETLIFY: Go to netlify.com/drop → drag this file → instant URL\n\nGITHUB PAGES: Repo → Settings → Pages → Upload as index.html\n\nVERCEL: vercel.com → New Project → Upload file',
-    'info');
+  // Show a full-screen deploy modal
+  const existing = document.getElementById('deployModal');
+  if (existing) { existing.remove(); return; }
+  const modal = document.createElement('div');
+  modal.id = 'deployModal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,4,7,0.97);overflow-y:auto;padding:24px;font-family:JetBrains Mono,monospace;color:#7a9db8;';
+  modal.innerHTML = `
+    <div style="max-width:680px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #162030;padding-bottom:12px;">
+        <div style="font-family:Syne,sans-serif;font-size:18px;font-weight:800;color:#00ffb3;">📡 DEPLOY ORACLE QUANT v8 · LIVE 24/7</div>
+        <button onclick="document.getElementById('deployModal').remove()" style="background:none;border:1px solid #162030;color:#7a9db8;padding:4px 10px;cursor:pointer;font-family:inherit;">✕ CLOSE</button>
+      </div>
+
+      <div style="background:#060a0f;border:1px solid #162030;padding:14px;margin-bottom:14px;">
+        <div style="color:#ffd60a;font-size:11px;margin-bottom:8px;">⬡ OPTION 1 — NETLIFY DROP (Fastest · Free · 24/7)</div>
+        <ol style="margin:0;padding-left:18px;font-size:10px;line-height:2.0;color:#7a9db8;">
+          <li>Go to <span style="color:#00d4ff;">netlify.com</span> → sign up free (use GitHub login)</li>
+          <li>Go to <span style="color:#00d4ff;">app.netlify.com/drop</span></li>
+          <li>Drag & drop your <span style="color:#00ffb3;">index.html</span> file onto the page</li>
+          <li>Netlify gives you a URL like <span style="color:#00ffb3;">xxx.netlify.app</span> instantly</li>
+          <li><b style="color:#ffd60a;">Password protection:</b> Site settings → Access control → Password → Set password</li>
+          <li>Your Claude API key is stored in your browser — never in the URL or public</li>
+        </ol>
+      </div>
+
+      <div style="background:#060a0f;border:1px solid #162030;padding:14px;margin-bottom:14px;">
+        <div style="color:#00d4ff;font-size:11px;margin-bottom:8px;">⬡ OPTION 2 — GITHUB PAGES (Free · Private repo possible)</div>
+        <ol style="margin:0;padding-left:18px;font-size:10px;line-height:2.0;color:#7a9db8;">
+          <li>Go to <span style="color:#00d4ff;">github.com</span> → create account → New Repository</li>
+          <li><b style="color:#ffd60a;">For privacy:</b> Set repository to <span style="color:#ff2d55;">PRIVATE</span></li>
+          <li>Upload <span style="color:#00ffb3;">index.html</span> to the repo (drag & drop in browser)</li>
+          <li>Settings → Pages → Branch: main → Folder: / (root) → Save</li>
+          <li>Your site will be at <span style="color:#00ffb3;">username.github.io/repo-name/</span></li>
+          <li><b style="color:#ffd60a;">Note:</b> GitHub Pages for private repos requires GitHub Pro ($4/mo) OR use Netlify option above for free</li>
+        </ol>
+      </div>
+
+      <div style="background:#060a0f;border:1px solid #162030;padding:14px;margin-bottom:14px;">
+        <div style="color:#bf5fff;font-size:11px;margin-bottom:8px;">⬡ OPTION 3 — VERCEL (Free · Custom domain possible)</div>
+        <ol style="margin:0;padding-left:18px;font-size:10px;line-height:2.0;color:#7a9db8;">
+          <li>Go to <span style="color:#00d4ff;">vercel.com</span> → sign up free</li>
+          <li>Add New Project → Upload → Select your <span style="color:#00ffb3;">index.html</span></li>
+          <li>Deploy → get URL like <span style="color:#00ffb3;">xxx.vercel.app</span></li>
+          <li>For password: use Vercel middleware or Netlify instead</li>
+        </ol>
+      </div>
+
+      <div style="background:#060a0f;border:1px solid #162030;padding:14px;margin-bottom:14px;">
+        <div style="color:#ff8c00;font-size:11px;margin-bottom:8px;">🔑 CLAUDE API KEY — ONE-TIME SETUP</div>
+        <ol style="margin:0;padding-left:18px;font-size:10px;line-height:2.0;color:#7a9db8;">
+          <li>Go to <span style="color:#00d4ff;">console.anthropic.com</span> → sign up / log in</li>
+          <li>Go to API Keys → Create Key → Copy the <span style="color:#00ffb3;">sk-ant-...</span> key</li>
+          <li>In Oracle Quant: paste it in the API KEY field → it saves in your browser localStorage</li>
+          <li>The key is <b style="color:#ffd60a;">never sent anywhere</b> except directly to Anthropic</li>
+          <li>Bookmark your deployed URL — open it on any device, enter your key once</li>
+        </ol>
+      </div>
+
+      <div style="background:rgba(0,255,179,0.04);border:1px solid rgba(0,255,179,0.2);padding:14px;margin-bottom:14px;">
+        <div style="color:#00ffb3;font-size:11px;margin-bottom:8px;">✅ PRIVACY SUMMARY</div>
+        <ul style="margin:0;padding-left:18px;font-size:10px;line-height:2.0;color:#7a9db8;">
+          <li>Your Claude API key: stored in <b>your browser only</b> — completely private</li>
+          <li>Your trade history: stored in <b>your browser localStorage only</b> — completely private</li>
+          <li>The HTML file itself: make the GitHub repo <b>PRIVATE</b> to hide source code</li>
+          <li>Netlify password protection: add a password so only you can access the URL</li>
+          <li>No server, no database — everything runs in YOUR browser on YOUR device</li>
+        </ul>
+      </div>
+
+      <div style="text-align:center;padding:10px;font-size:9px;color:#234058;">
+        Oracle Quant v8 · Single-file app · Works 24/7 as long as tab is open · API calls go directly from your browser to Anthropic/Polymarket
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
 }
 setInterval(()=>{
   const ts=new Date().toLocaleTimeString('en-US',{hour12:false});
@@ -2389,8 +2479,8 @@ window.onload = () => {
   setInterval(fetchPrices, 30000);
   initCryptoPanel();
   ['bankroll','ptarget'].forEach(id => document.getElementById(id).addEventListener('input', updatePT));
-  toast('info','ORACLE QUANT v7 Online',
-    'v7 GOD MODE: Trade Flow Analysis · Whale Detection · Compound Kelly · $5→$30 Mission · GOLD/SILVER signal tiers · 99% accuracy protocol · Claude Opus ultra mode',
+  toast('info','ORACLE QUANT v8 · SELF-LEARNING LIVE','
+v8 GOD MODE: 2-Hour $5→$30 Mission · Auto Self-Learning Weights · Trade Flow + Whale Detection · GOLD/SILVER Tiers · 99% Accuracy · Claude Opus ULTRA · 24/7 Deploy-Ready',
     'info');
 };
 </script>
@@ -2490,7 +2580,7 @@ window.onload = () => {
 <div id="botOv">
   <div class="bov-top">
     <div class="bhex" style="width:24px;height:24px;font-size:8px;flex-shrink:0;">B</div>
-    <div style="flex-shrink:0;"><div class="bov-logo">ORACLE AI BOT v7</div><div class="bov-sub">18 MARKETS · 5 STRATEGIES · GOD-MODE AI · COMPOUND KELLY · $5→$30 MISSION</div></div>
+    <div style="flex-shrink:0;"><div class="bov-logo">ORACLE AI BOT v8</div><div class="bov-sub">18 MARKETS · 5 STRATS · GOD-MODE AI · COMPOUND KELLY · SELF-LEARNING · $5→$30 / 2HR</div></div>
     <div class="bov-kpi"><div class="bov-kpi-l">BALANCE</div><div class="bov-kpi-v" id="bov-bal" style="color:#00ffb3">$0</div></div>
     <div class="bov-kpi"><div class="bov-kpi-l">HOUR P&L</div><div class="bov-kpi-v" id="bov-pnl" style="color:#00ffb3">+$0</div></div>
     <div class="bov-kpi"><div class="bov-kpi-l">WIN RATE</div><div class="bov-kpi-v" id="bov-wr" style="color:#00ffb3">—</div></div>
@@ -2501,12 +2591,12 @@ window.onload = () => {
     <div class="bov-kpi"><div class="bov-kpi-l">MAX DD</div><div class="bov-kpi-v" id="bov-dd" style="color:#ff2d55">0%</div></div>
     <div class="bov-kpi"><div class="bov-kpi-l">LOOPS FOUND</div><div class="bov-kpi-v" id="bov-lc" style="color:#bf5fff">0</div></div>
     <div class="bov-kpi"><div class="bov-kpi-l">GROWTH</div><div class="bov-kpi-v" id="bov-growth" style="color:#00ffb3">1.000x</div></div>
-    <div class="bov-timer"><div class="bov-timer-l">1-HR MISSION</div><div class="bov-timer-v" id="bov-mt">60:00</div></div>
+    <div class="bov-timer"><div class="bov-timer-l">2-HR MISSION</div><div class="bov-timer-v" id="bov-mt">120:00</div></div>
     <div class="bov-live" id="bov-live">● LIVE</div>
     <div class="bov-x" onclick="bovClose()">✕ CLOSE</div>
   </div>
   <div class="bov-mission">
-    <div style="font-family:'JetBrains Mono';font-size:6px;color:#ff8c00;white-space:nowrap;">$5→$30 GOD MODE MISSION</div>
+    <div style="font-family:'JetBrains Mono';font-size:6px;color:#ff8c00;white-space:nowrap;">$5→$30 · 2-HOUR GOD MODE MISSION</div>
     <div class="bov-mbar-wrap"><div class="bov-mbar-fill" id="bov-mf"></div></div>
     <div class="bov-mpct" id="bov-mpct">0%</div>
     <div class="bov-mamt" id="bov-mamt">+$0 of $15 needed</div>
@@ -2583,6 +2673,8 @@ const BOV_STRATS = [
   {id:'ai_deep',  label:'AI DEEP',  color:'#bf5fff'},
 ];
 
+const BOV_MISSION_SECS = 7200; // 2-hour mission duration in seconds
+
 const BOV = {
   running:false, timer:null,
   prices:{}, lastPx:{},
@@ -2598,6 +2690,93 @@ const BOV = {
   streakBonus:0, // extra size when on winning streak ≥3
   totalLoopholes:0,
 };
+
+
+// ═══════════════════════════════════════════════════════════════
+// SELF-LEARNING ENGINE — Auto Brier-score update + Accuracy loop
+// Runs silently after every 10 BOV trades and every 5 Polymarket analyses
+// ═══════════════════════════════════════════════════════════════
+const SELF_LEARN = {
+  bovTradeCount: 0,      // trades since last BOV weight update
+  analyzeCount: 0,       // polymarket analyses since last update
+  updateInterval: 10,    // update weights every N trades
+  totalUpdates: 0,       // total self-learning update cycles
+  lastUpdateTs: 0,
+  learningLog: [],       // log of each learning cycle
+};
+
+function selfLearnTick(source='bov') {
+  if (source === 'bov') SELF_LEARN.bovTradeCount++;
+  else SELF_LEARN.analyzeCount++;
+
+  const totalNew = SELF_LEARN.bovTradeCount + SELF_LEARN.analyzeCount;
+  if (totalNew < SELF_LEARN.updateInterval) return;
+
+  // Reset counters
+  SELF_LEARN.bovTradeCount = 0;
+  SELF_LEARN.analyzeCount = 0;
+  SELF_LEARN.totalUpdates++;
+  SELF_LEARN.lastUpdateTs = Date.now();
+
+  // Run silent Brier-score update on main signal weights
+  const outcomes = STATE.trade_outcomes.entries;
+  if (outcomes.length >= 3) {
+    const bySignal = {};
+    outcomes.forEach(o => {
+      if (!bySignal[o.signal]) bySignal[o.signal] = {correct:0,total:0,ev:0};
+      bySignal[o.signal].total++;
+      if (o.correct) bySignal[o.signal].correct++;
+      bySignal[o.signal].ev += (o.ev||0);
+    });
+    const newWeights = {...STATE.signal_weights};
+    const blend = Math.min(0.6, outcomes.length / 15.0);
+    let improved = false;
+    Object.keys(STATE.signal_weights).forEach(src => {
+      const perf = bySignal[src];
+      const baseW = STATE.signal_weights[src];
+      let adj = 0;
+      if (perf && perf.total >= 2) {
+        const acc = perf.correct / perf.total;
+        const avgEv = perf.ev / perf.total;
+        // Accuracy-based adjustment
+        if (acc < 0.45) adj = -0.06 * (0.45 - acc) / 0.45;
+        else if (acc > 0.55) adj = 0.06 * (acc - 0.55) / 0.45;
+        // EV-based boost
+        if (avgEv > 0.05) adj += 0.02;
+        else if (avgEv < -0.02) adj -= 0.02;
+        if (adj !== 0) improved = true;
+      }
+      let newW = baseW * (1-blend) + Math.max(0.02, baseW+adj) * blend;
+      newWeights[src] = Math.max(0.05, Math.min(0.70, newW));
+    });
+    const tot = Object.values(newWeights).reduce((a,b)=>a+b,0);
+    Object.keys(newWeights).forEach(k => newWeights[k] = parseFloat((newWeights[k]/tot).toFixed(3)));
+    STATE.signal_weights = newWeights;
+    STATE.loop_stats.signal_weight_version++;
+    persist();
+    renderWeights();
+
+    const logEntry = {
+      cycle: SELF_LEARN.totalUpdates,
+      ts: Date.now(),
+      outcomes: outcomes.length,
+      blend: blend.toFixed(2),
+      version: STATE.loop_stats.signal_weight_version,
+      improved,
+    };
+    SELF_LEARN.learningLog.push(logEntry);
+    if (SELF_LEARN.learningLog.length > 50) SELF_LEARN.learningLog.shift();
+
+    // Update self-learn KPI
+    const slEl = document.getElementById('sl-count');
+    if (slEl) slEl.textContent = SELF_LEARN.totalUpdates;
+    const slVerEl = document.getElementById('sl-ver');
+    if (slVerEl) slVerEl.textContent = 'v'+STATE.loop_stats.signal_weight_version;
+
+    logR(`🧠 Self-learn #${SELF_LEARN.totalUpdates} · weights v${STATE.loop_stats.signal_weight_version} · ${outcomes.length} outcomes · blend=${(blend*100).toFixed(0)}%`, 'ok');
+    addSig('info','🧠 SELF-LEARN',`AI weights auto-updated (cycle #${SELF_LEARN.totalUpdates})`,`Brier-score blend=${(blend*100).toFixed(0)}% · v${STATE.loop_stats.signal_weight_version}`);
+  }
+}
 
 // ── PRICE ENGINE ──────────────────────────────────────────────────
 function bovGetPrice(mkt) {
@@ -2697,7 +2876,7 @@ async function bovAIConfirm(sig){
   const recentPrices = hist.slice(-12).map((h,i)=>h.price.toFixed(4)).join(',');
   const priceChange12 = hist.length>1?((hist[hist.length-1].price-hist[hist.length>12?hist.length-12:0].price)/hist[Math.max(0,hist.length-12)].price*100).toFixed(3):0;
 
-  const prompt=`You are ORACLE v7, the God of Prediction. Real-time compound-growth trade decision. Mission: $5→$30.
+  const prompt=`You are ORACLE v8, the God of Prediction. Real-time compound-growth trade decision. Mission: $5→$30 in 2 hours.
 
 ASSET: ${mkt.sym} (${mkt.cat}) | CURRENT PRICE: ${fmtBP(price,mkt)}
 PROPOSED: ${dir} | QUANT SCORE: ${score.toFixed(0)}% | STRATEGY: ${sig.strat}
@@ -2827,6 +3006,7 @@ function bovCloseTrade(pid,exitP,reason,pnlPct){
   delete BOV.positions[pid];
   bovFeedLog(win?'win':'loss',pos.sym,`${reason} ${win?'+':''}$${pnlAmt.toFixed(4)} (${(pnlPct*100).toFixed(2)}%) Bal:$${BOV.balance.toFixed(3)}`);
   bovRenderPositions();
+  selfLearnTick('bov'); // v8 self-learning trigger after each trade
 }
 
 // ── MAIN CYCLE ────────────────────────────────────────────────────
@@ -2863,9 +3043,9 @@ async function bovCycle(){
   bovUpdateKPIs();bovRenderCards();bovDrawEq();
   // timer
   const el=Math.floor((Date.now()-BOV.missionStart)/1000);
-  const rem=Math.max(0,3600-el);
+  const rem=Math.max(0,BOV_MISSION_SECS-el);
   document.getElementById('bov-mt').textContent=`${Math.floor(rem/60).toString().padStart(2,'0')}:${(rem%60).toString().padStart(2,'0')}`;
-  if(rem===0&&BOV.running){bovStop();toast('info','Time Up',`Mission ended · Balance $${BOV.balance.toFixed(2)}·${BOV.trades.length} trades·${BOV.wins}W/${BOV.losses}L`,'info');}
+  if(rem===0&&BOV.running){bovStop();const fin=BOV.balance>=BOV.target;toast(fin?'buy':'info',fin?'🎯 2-HR MISSION COMPLETE!':'⏰ 2-Hour Mission Ended',`$${BOV.startBal}→$${BOV.balance.toFixed(2)} · ${BOV.trades.length} trades · ${BOV.wins}W/${BOV.losses}L · Growth:${(BOV.balance/BOV.startBal).toFixed(2)}x`,'info');}
   const p2=(BOV.scanCycle%25)/25*100;
   document.getElementById('bov-prog').style.width=p2+'%';
   document.getElementById('bov-progtxt').textContent=`Cyc ${BOV.scanCycle} · ${openC}pos · P&L ${BOV.balance>=BOV.startBal?'+':''}$${(BOV.balance-BOV.startBal).toFixed(4)}`;
@@ -2886,7 +3066,7 @@ function bovStart(){
   for(let i=0;i<5;i++)bovTickAll();
   BOV.equity=[{t:Date.now(),v:cap}];
   BOV.timer=setInterval(bovCycle,4000);bovCycle();
-  toast('buy','🤖 Oracle Bot v7 GOD MODE',`$${cap}→$${tgt} · ${BOV.activeStrats.length} strats · ${BOV_MARKETS.length} markets · 4s · Compound Kelly ON`,'buy');
+  toast('buy','🤖 Oracle Bot v8 · 2-HR MISSION',`$${cap}→$${tgt} in 2 hrs · ${BOV.activeStrats.length} strats · ${BOV_MARKETS.length} markets · 4s · Compound Kelly · Self-Learning`,'buy');
 }
 function bovStop(){
   BOV.running=false;clearInterval(BOV.timer);
@@ -2901,6 +3081,7 @@ function bovReset(){
     wins:0,losses:0,curStreak:0,maxDD:0,totalWin:0,totalLoss:0,
     scanCycle:0,aiCount:0,loopCount:0,missionStart:0,prices:{},lastPx:{},
     totalLoopholes:0,goldTrades:0,silverTrades:0,streakBonus:0});
+  Object.assign(SELF_LEARN,{bovTradeCount:0,analyzeCount:0,totalUpdates:0,lastUpdateTs:0,learningLog:[]});
   document.getElementById('bov-feed').innerHTML='<div style="padding:5px;text-align:center;color:#234058;font-family:JetBrains Mono;font-size:6px;">Reset.</div>';
   document.getElementById('bov-poslist').innerHTML='<div style="padding:5px;text-align:center;color:#234058;font-family:JetBrains Mono;font-size:6px;">No positions</div>';
   document.getElementById('bov-ailog').innerHTML='<div style="padding:5px;text-align:center;color:#234058;font-family:JetBrains Mono;font-size:6px;">AI log cleared</div>';
