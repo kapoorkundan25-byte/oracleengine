@@ -1,181 +1,328 @@
-# ORACLE QUANT v8 — GOD MODE 🔮
+# 🔮 OracleEngine — Polymarket Analytics & Research Platform
 
-**Self-Learning · 2-Hour $5→$30 Mission · 24/7 · Live Polymarket AI · 99% Accuracy Protocol**
-
-> **🟢 LIVE URL:** `https://kapoorkundan25-byte.github.io/oracleengine/`
->
-> Auto-deploys from `main` via GitHub Actions every time code is pushed.
-
-A single-page AI-powered prediction intelligence platform that:
-- Connects to Polymarket live markets (Gamma + CLOB APIs)
-- Analyzes real trade flow and whale activity
-- Uses the paid Claude API (Sonnet/Opus) for deep Bayesian analysis
-- Automatically self-learns by updating signal weights via Brier-score every 10 trades
-- Runs a compound-Kelly bot targeting $5→$30 in 2 hours
+> ⚠️ **Disclaimer**: OracleEngine is for **educational and research purposes only**.
+> Prediction markets carry real financial risk — never invest more than you can afford
+> to lose entirely. Nothing in this tool constitutes financial advice.
 
 ---
 
-## ⚡ Quick Start — Activate Live Deployment
+## 📖 Overview
 
-This repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that publishes the app to GitHub Pages automatically.
-
-**One-time setup (do this once after the PR is merged):**
-
-1. Go to **[github.com/kapoorkundan25-byte/oracleengine/settings/pages](https://github.com/kapoorkundan25-byte/oracleengine/settings/pages)**
-2. Under **Source**, select **GitHub Actions** (not "Deploy from a branch")
-3. Click **Save**
-4. The next push to `main` triggers the workflow and the app goes live at:
-   ```
-   https://kapoorkundan25-byte.github.io/oracleengine/
-   ```
-5. You can also trigger it manually: **Actions → Deploy Oracle Quant v8 → Run workflow**
-
-**After that it's fully automatic** — every commit to `main` redeploys within ~1 minute.
+OracleEngine is a production-quality Python platform for analysing
+[Polymarket](https://polymarket.com) prediction markets. It provides five
+integrated modules covering live data fetching, technical analysis, intelligent
+alerts, historical back-testing, and news-sentiment scoring.
 
 ---
 
-## 🚀 Deploy Live (24/7 Free Hosting)
+## ✨ Feature Overview
 
-### Option 1 — Netlify (Connect GitHub — Auto-Deploys on Every Push) ⭐ Recommended
-
-This repo ships a `netlify.toml` that pre-configures all settings automatically.
-Just connect the repo and hit Deploy — no field values to enter.
-
-**If Netlify still asks you for fields, use these exact values:**
-
-| Netlify field | Value |
-|---|---|
-| **Base directory** | *(leave blank)* |
-| **Build command** | *(leave blank)* |
-| **Publish directory** | `.` ← a single dot |
-| **Functions directory** | *(leave blank)* |
-
-**Steps:**
-1. Go to **[app.netlify.com](https://app.netlify.com)** → **Add new site → Import an existing project**
-2. Choose **GitHub** → authorise → select **kapoorkundan25-byte/oracleengine**
-3. Leave all build fields blank (or as shown above) → click **Deploy site**
-4. You get a URL like `oracle-abc123.netlify.app` in ~30 seconds
-5. **For privacy**: Site Settings → Access Control → Password → set a password only you know
-6. Your Claude API key is stored in **your browser only** — never sent to Netlify
-
-> **Netlify Drop (no GitHub account needed):**
-> Go to **[app.netlify.com/drop](https://app.netlify.com/drop)** and drag-and-drop `index.html` directly.
-
-### Option 2 — GitHub Pages (Auto-deploys via GitHub Actions — already set up)
-
-This repo already includes `.github/workflows/deploy.yml`.
-
-1. Push / merge to **`main`**
-2. Go to **Settings → Pages → Source: GitHub Actions → Save** (one-time)
-3. App goes live at `https://kapoorkundan25-byte.github.io/oracleengine/`
-4. *Note: GitHub Pages on private repos requires GitHub Pro ($4/mo). Use Netlify for 100% free.*
-
-### Option 3 — Vercel
-
-1. Go to **[vercel.com](https://vercel.com)** → sign up free
-2. New Project → Upload → select `index.html` → Deploy
-3. Get URL like `oracle.vercel.app`
-
-**In-app deploy guide**: Click the **📡 DEPLOY** button in the app toolbar for a step-by-step modal.
-
----
-
-## 🔑 Claude API Key Setup (One-Time)
-
-1. Go to **[console.anthropic.com](https://console.anthropic.com)** → sign up / log in
-2. Go to **API Keys** → **Create Key** → copy the `sk-ant-...` key
-3. In Oracle Quant: paste it in the **API KEY** field at the top
-4. It saves in your browser's localStorage — enter it once per browser/device
-5. **The key never leaves your browser** — it goes directly from your browser to Anthropic
-
-**Models used:**
-- Standard/Deep: `claude-sonnet-4-20250514`
-- Ultra GOD MODE: `claude-opus-4-20250514` (most powerful, highest cost)
-
----
-
-## ✨ v8 Features
-
-| Feature | Description |
-|---|---|
-| **Live Polymarket Markets** | Gamma API: top 25 markets by volume |
-| **CLOB Trade Flow** | Real-time buyer/seller pressure from last 50 trades |
-| **Whale Detection** | Identifies accumulation/distribution by large traders (>$200) |
-| **99% Accuracy Protocol** | GOLD/SILVER/BRONZE signal tiers — only enter when 3+ signals align |
-| **🆕 2-Hour Mission** | Bot timer extended from 1 hour (v7) to 2 hours for $5→$30 compound growth |
-| **🆕 Self-Learning AI** | Brier-score weight auto-update every 10 trades — gets smarter over time |
-| **🆕 24/7 Mode** | `∞ 24/7` toggle: scanner restarts automatically after each cycle |
-| **🆕 Deploy Guide** | In-app modal with step-by-step free hosting + privacy instructions |
-| **Compound Kelly Sizing** | Position size grows with account balance — exponential growth |
-| **Claude Opus ULTRA** | Most powerful model for ultra depth analysis |
-| **Signal Weight Learning** | Brier-score calibration that improves with each prediction |
-| **5 Bot Strategies** | Momentum, Reversal, Breakout, Scalp, AI Deep |
-
----
-
-## 🧠 Self-Learning Engine
-
-Every **10 trades** (bot + polymarket analyses combined), Oracle v8 automatically:
-
-1. Calculates per-signal accuracy from all recorded trade outcomes
-2. Runs Brier-score blending to update signal weights
-3. Boosts weights for signals with accuracy > 55%
-4. Reduces weights for signals with accuracy < 45%
-5. Persists updated weights to localStorage (survives page reloads)
-6. Displays learning cycle count and weight version in the header
-
-Over time, the system self-calibrates to your specific markets and conditions — like a neural network that gets smarter with every prediction.
-
----
-
-## 🤖 2-Hour $5→$30 Bot Usage
-
-1. Click **🤖 AI BOT** in the top-right corner
-2. Set **CAP$** = `5` and **TGT$** = `30`  
-3. Enter your Claude API key for AI-confirmed trades
-4. Click **▶ START** — the 2-hour countdown begins
-5. The bot uses compound Kelly sizing + streak bonuses to target 6x in 2 hours
-
-**Compound Kelly sizing:**
-- Base position: 22% of current balance
-- With AI Kelly signal: AI-provided fraction (half-Kelly, capped 40%)
-- Streak bonus: +5% size per consecutive win ≥3 (max +15%)
-- As balance grows, absolute position size grows automatically (compounding)
-
-**2-hour strategy:**
-- 4-second scan cycles = 1,800 cycles in 2 hours
-- Target: ~20-30 profitable trades at 3-5% each = 6x compound growth
-- AI confirmation every 2 cycles prevents bad trades
-- Self-learning weights improve win rate as the session progresses
-
----
-
-## 📊 Polymarket APIs Used
-
-| API | Purpose |
-|---|---|
-| `gamma-api.polymarket.com/markets` | Market list, metadata, volume |
-| `clob.polymarket.com/book` | Live order book depth |
-| `clob.polymarket.com/price` | Best bid/ask prices |
-| `clob.polymarket.com/trades` | Recent trade flow (last 50 trades) |
-| `api.coingecko.com` | Live crypto prices for context |
-
----
-
-## 🔒 Privacy & Security
-
-| Data | Where it's stored | Who can see it |
+| Module | File | Description |
 |---|---|---|
-| Claude API key | Your browser localStorage | **You only** |
-| Trade history | Your browser localStorage | **You only** |
-| Signal weights | Your browser localStorage | **You only** |
-| Source code | GitHub repo | **Private if repo is private** |
-| App URL | Netlify/Vercel | **Password-protected if you set it** |
+| 📊 Data Fetcher | `modules/data_fetcher.py` | Live markets, order books, trades & price history via Polymarket APIs |
+| 📈 Trend Analyzer | `modules/trend_analyzer.py` | RSI, SMA/EMA, momentum, volatility, breakout detection |
+| 🔔 Alert System | `modules/alert_system.py` | Background polling with webhook, e-mail, and console notifications |
+| 📉 Backtester | `modules/backtester.py` | Strategy simulation: Sharpe ratio, max drawdown, equity-curve chart |
+| 🧠 Sentiment Analyzer | `modules/sentiment_analyzer.py` | VADER sentiment + NewsAPI + price correlation |
 
-**No server, no database** — everything runs in your browser. Your data never leaves your device except API calls directly to Anthropic and Polymarket.
+---
+
+## 🏗️ Architecture
+
+```
+oracleengine/
+├── main.py                   ← CLI entry point (argparse)
+├── config.py                 ← Environment-based configuration
+├── requirements.txt
+├── .env.example
+│
+├── modules/
+│   ├── data_fetcher.py       ← Polymarket REST API wrapper (Gamma + CLOB)
+│   ├── trend_analyzer.py     ← pandas/numpy technical indicators
+│   ├── alert_system.py       ← Background thread alert manager
+│   ├── backtester.py         ← Strategy simulation engine
+│   └── sentiment_analyzer.py ← VADER + NewsAPI sentiment scoring
+│
+├── utils/
+│   ├── logger.py             ← Colour console + rotating file logger
+│   └── helpers.py            ← Format helpers + list chunking
+│
+└── tests/
+    ├── test_data_fetcher.py
+    ├── test_trend_analyzer.py
+    ├── test_backtester.py
+    └── test_sentiment_analyzer.py
+```
+
+```
+┌─────────────┐   REST/JSON    ┌──────────────────────────┐
+│  Polymarket │ ◄────────────► │  data_fetcher.py         │
+│  Gamma API  │                │  (TTL cache + retry)      │
+│  CLOB API   │                └──────────┬───────────────┘
+└─────────────┘                           │
+                                          │ price series / trades
+              ┌───────────────────────────┼──────────────────────┐
+              ▼                           ▼                      ▼
+    ┌──────────────────┐    ┌──────────────────────┐  ┌─────────────────────┐
+    │ trend_analyzer   │    │ backtester           │  │ sentiment_analyzer  │
+    │ RSI / SMA / EMA  │    │ Strategy → signals   │  │ VADER + NewsAPI     │
+    │ momentum / vol   │    │ equity curve / stats │  │ Pearson correlation │
+    └──────────────────┘    └──────────────────────┘  └─────────────────────┘
+              │                                                  │
+              └──────────────────────┬───────────────────────────┘
+                                     ▼
+                          ┌────────────────────┐
+                          │  alert_system      │
+                          │  AlertManager      │
+                          │  (background thread│
+                          │   + JSON persist)  │
+                          └────────────────────┘
+                                     │
+                          ┌──────────┴─────────┐
+                          │ console / webhook  │
+                          │ / e-mail callbacks │
+                          └────────────────────┘
+```
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+* Python 3.10 or later
+* A [NewsAPI](https://newsapi.org) key (free tier available) for sentiment analysis
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/kapoorkundan25-byte/oracleengine.git
+cd oracleengine
+
+# 2. (Recommended) create a virtual environment
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+```
+
+---
+
+## ⚙️ Configuration
+
+Copy the example file and fill in your secrets:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Required | Description |
+|---|---|---|
+| `POLYMARKET_API_KEY` | No | Bearer token for authenticated endpoints (most are public) |
+| `NEWS_API_KEY` | Yes (sentiment) | [newsapi.org](https://newsapi.org) key |
+| `SMTP_HOST` | No | SMTP server hostname for e-mail alerts |
+| `SMTP_PORT` | No | SMTP port (default 587) |
+| `SMTP_USER` | No | SMTP login username / sender address |
+| `SMTP_PASS` | No | SMTP password or app-password |
+| `ALERT_WEBHOOK_URL` | No | Slack / Discord webhook for alert notifications |
+| `LOG_LEVEL` | No | `DEBUG` / `INFO` / `WARNING` / `ERROR` (default `INFO`) |
+| `CACHE_TTL_SECONDS` | No | API response cache duration in seconds (default 300) |
+
+---
+
+## 💻 CLI Usage
+
+```
+python main.py <command> [options]
+python main.py --help
+```
+
+### `fetch` — Live market data
+
+```bash
+# Top 20 active markets by volume
+python main.py fetch --limit 20
+
+# Search for specific markets
+python main.py fetch --query "bitcoin"
+
+# Include closed markets
+python main.py fetch --limit 10 --all
+```
+
+### `analyze` — Trend analysis
+
+```bash
+python main.py analyze --market-id 0xabc123def456...
+```
+
+Output includes: momentum signal, RSI, volatility, SMA/EMA crossover, breakout
+detection, and an overall `BULLISH` / `BEARISH` / `NEUTRAL` signal.
+
+### `backtest` — Strategy back-testing
+
+```bash
+# Test Momentum strategy with default $1,000 capital
+python main.py backtest --market-id 0xabc123 --strategy momentum
+
+# RSI mean-reversion with custom capital and date range
+python main.py backtest \
+    --market-id 0xabc123 \
+    --strategy rsi \
+    --start 2024-01-01 \
+    --end 2024-06-30 \
+    --capital 5000
+
+# Save equity curve chart
+python main.py backtest --market-id 0xabc123 --strategy breakout --plot
+```
+
+Available strategies: `momentum`, `rsi`, `breakout`
+
+### `sentiment` — News sentiment report
+
+```bash
+python main.py sentiment --market-id 0xabc123
+
+# Override the search query (defaults to market question)
+python main.py sentiment --market-id 0xabc123 --query "bitcoin ETF approval"
+```
+
+### `monitor` — Alert daemon
+
+```bash
+# Start monitoring every 60 seconds (Ctrl+C to stop)
+python main.py monitor --interval 60
+```
+
+Configure alerts programmatically before starting the daemon:
+
+```python
+from modules.alert_system import AlertManager, AlertCondition, webhook_callback
+
+mgr = AlertManager()
+mgr.add_alert(AlertCondition(
+    market_id="0xabc123",
+    condition_type="PRICE_ABOVE",
+    threshold=0.80,
+    callback=webhook_callback("https://hooks.slack.com/..."),
+))
+```
+
+---
+
+## 📚 Module API Reference
+
+### `modules.data_fetcher`
+
+```python
+from modules.data_fetcher import (
+    get_markets,               # list[Market]
+    get_market_by_id,          # Market | None
+    get_market_orderbook,      # OrderBook
+    get_market_trades,         # list[Trade]
+    get_market_price_history,  # list[PricePoint]
+    search_markets,            # list[Market]
+)
+```
+
+### `modules.trend_analyzer`
+
+```python
+from modules.trend_analyzer import (
+    calculate_price_momentum,  # pd.Series
+    calculate_volume_trend,    # dict
+    detect_price_breakout,     # dict
+    calculate_volatility,      # pd.Series
+    calculate_rsi,             # pd.Series
+    calculate_moving_averages, # dict[str, pd.Series]
+    get_market_summary,        # dict  (BULLISH / BEARISH / NEUTRAL)
+)
+```
+
+### `modules.alert_system`
+
+```python
+from modules.alert_system import (
+    AlertCondition,  # dataclass
+    AlertManager,    # class
+    console_callback,
+    webhook_callback,
+    email_callback,
+)
+```
+
+### `modules.backtester`
+
+```python
+from modules.backtester import (
+    Signal,                    # BUY / SELL / HOLD
+    Strategy,                  # ABC
+    MomentumStrategy,
+    RSIMeanReversionStrategy,
+    BreakoutStrategy,
+    BacktestResult,            # frozen dataclass
+    Backtester,
+)
+```
+
+### `modules.sentiment_analyzer`
+
+```python
+from modules.sentiment_analyzer import (
+    SentimentReport,
+    fetch_news_headlines,
+    analyze_sentiment,
+    get_market_sentiment_score,
+    correlate_sentiment_with_price,
+)
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# All tests
+pytest tests/ -v
+
+# Individual suites
+pytest tests/test_data_fetcher.py -v
+pytest tests/test_trend_analyzer.py -v
+pytest tests/test_backtester.py -v
+pytest tests/test_sentiment_analyzer.py -v
+```
+
+All external HTTP calls are mocked — no API keys are required to run the tests.
+
+---
+
+## 📋 Requirements
+
+See [requirements.txt](requirements.txt).
+
+Key dependencies:
+
+| Package | Purpose |
+|---|---|
+| `requests` | HTTP client for Polymarket + NewsAPI |
+| `pandas` / `numpy` | Numerical computation for indicators |
+| `pydantic` | Typed data models for API responses |
+| `vaderSentiment` | Rule-based sentiment scoring |
+| `cachetools` | TTL caching for API responses |
+| `matplotlib` | Equity-curve charting |
+| `python-dotenv` | `.env` file loading |
+| `newsapi-python` | Official NewsAPI client |
 
 ---
 
 ## ⚠️ Disclaimer
 
-This tool is for educational and entertainment purposes. Polymarket involves real financial risk. Never invest more than you can afford to lose. The bot uses simulated paper trading — "balance" is not real money unless you manually place the same trades on Polymarket.
+OracleEngine is a **research and educational tool**.
+
+* Polymarket involves real financial risk — you can lose everything you invest.
+* Prediction markets are zero-sum games; for every winner there is a loser.
+* Past back-test performance does not guarantee future results.
+* Automated trading bots may violate Polymarket's Terms of Service.
+* Consult a qualified financial adviser before making any investment decisions.
+* The authors accept no liability for financial losses arising from use of this software.
