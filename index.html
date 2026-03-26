@@ -616,7 +616,7 @@ canvas#cryptoChart{display:block;width:100%!important;}
     </div>
     <!-- POLYMARKET ANALYSER PANEL -->
     <div id="polyAnalyser">
-      <div class="pm-empty">⬡<br><br>Click ⟳ LOAD in the Scanner panel,<br>then switch to ⬡ POLY ANALYSER to browse live markets.</div>
+      <div class="pm-empty">⬡<br><br>Click ⟳ LOAD in the Scanner panel<br>to fetch live Polymarket markets.</div>
     </div>
     <div id="feed">
       <div class="empty-f" id="emptyEl">
@@ -1430,7 +1430,7 @@ function renderPolyAnalyser() {
       <div class="pm-meta">
         <div class="pm-live-dot ${isLive ? 'live' : 'local'}" title="${isLive ? 'Live Polymarket data' : 'Local fallback data'}"></div>
         <span class="pm-cat-badge" style="color:${catColor};border-color:${catColor}40">${m.cat || 'OTHER'}</span>
-        ${isAnalyzed ? '<span style="padding:1px 4px;font-family:JetBrains Mono;font-size:5px;color:var(--g);border:1px solid rgba(0,255,179,0.2);background:rgba(0,255,179,0.05)">✓ ANALYSED</span>' : ''}
+        ${isAnalyzed ? '<span style="padding:1px 4px;font-family:JetBrains Mono;font-size:5px;color:var(--g);border:1px solid rgba(0,255,179,0.2);background:rgba(0,255,179,0.05)">✓ ANALYZED</span>' : ''}
         ${m.rec ? `<span style="padding:1px 5px;font-family:Syne;font-size:7px;font-weight:700;${m.rec==='YES'?'color:#000;background:var(--g)':m.rec==='NO'?'color:#fff;background:var(--r)':'color:#000;background:var(--m)'}">${m.rec}</span>` : ''}
         <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:5px;color:var(--m)">click to analyse →</span>
       </div>
