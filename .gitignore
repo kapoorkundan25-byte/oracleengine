@@ -7,7 +7,37 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
-# Build results
+# ─── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+# OracleEngine runtime artefacts
+logs/
+alerts.json
+equity_*.png
+.env
+
+# ─── .NET ────────────────────────────────────────────────────────────────────
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
