@@ -21,7 +21,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:linear-gradient(rgba(0,255,179,0.012) 1px,transparent 1px),
   linear-gradient(90deg,rgba(0,255,179,0.012) 1px,transparent 1px);
   background-size:48px 48px;}
-#app{position:relative;z-index:1;height:100vh;display:grid;grid-template-rows:26px 46px 26px 1fr;overflow:hidden;}
+#app{position:relative;z-index:1;height:100vh;display:grid;grid-template-rows:26px 46px 26px 30px 1fr;overflow:hidden;}
+
+/* ═══ EDGE PICK BANNER ═══ */
+#edgeBanner{display:flex;align-items:center;padding:0 14px;gap:10px;
+  background:linear-gradient(90deg,rgba(255,140,0,0.12),rgba(255,45,85,0.10),rgba(255,140,0,0.12));
+  border-bottom:1px solid rgba(255,140,0,0.4);flex-shrink:0;overflow:hidden;white-space:nowrap;}
+#edgeBanner .eb-badge{background:var(--o);color:#000;font-family:'JetBrains Mono';font-size:8px;
+  font-weight:700;padding:2px 6px;border-radius:2px;flex-shrink:0;letter-spacing:0.5px;}
+#edgeBanner .eb-badge.flat{background:var(--r);}
+#edgeBanner .eb-pick{font-family:'JetBrains Mono';font-size:9px;color:var(--y);font-weight:700;flex-shrink:0;}
+#edgeBanner .eb-sep{color:var(--m);font-size:8px;flex-shrink:0;}
+#edgeBanner .eb-detail{font-family:'JetBrains Mono';font-size:8px;color:var(--t);}
+#edgeBanner .eb-detail span{color:var(--g);}
+#edgeBanner .eb-warn{font-family:'JetBrains Mono';font-size:8px;color:var(--r);font-weight:700;flex-shrink:0;}
 
 /* ═══ TICKER ═══ */
 #ticker{background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;overflow:hidden;position:relative;flex-shrink:0;}
@@ -513,6 +526,20 @@ canvas#cryptoChart{display:block;width:100%!important;}
   <button class="abtn b" id="contBtn" onclick="toggleContinuous(this)">∞ 24/7</button>
 </div>
 
+<!-- TONIGHT'S EDGE PICK BANNER -->
+<div id="edgeBanner">
+  <div class="eb-badge">⚡ TONIGHT'S EDGE</div>
+  <div class="eb-pick">ILLINOIS YES</div>
+  <div class="eb-sep">·</div>
+  <div class="eb-detail">Polymarket <span>&lt;40%</span> → value window open</div>
+  <div class="eb-sep">·</div>
+  <div class="eb-detail">Houston YES likely <span>inflated &gt;65%</span> (home-court narrative)</div>
+  <div class="eb-sep">·</div>
+  <div class="eb-detail">Sharps · Vegas · CBS · Fox · <span>Las Vegas Sun</span> all backing <span>Illinois +3.5</span></div>
+  <div class="eb-sep">·</div>
+  <div class="eb-warn">⚠ FLAT STAKE ONLY — do not chase earlier wins</div>
+</div>
+
 <!-- MAIN -->
 <div id="main">
 
@@ -605,6 +632,7 @@ canvas#cryptoChart{display:block;width:100%!important;}
     <!-- POLYMARKET ANALYSER TOOLBAR -->
     <div id="polyToolbar">
       <div class="pm-cat on" id="pmCatAll" onclick="filtPoly('ALL',this)">ALL</div>
+      <div class="pm-cat" id="pmCatSports" onclick="filtPoly('SPORTS',this)">SPORTS</div>
       <div class="pm-cat" id="pmCatCrypto" onclick="filtPoly('CRYPTO',this)">CRYPTO</div>
       <div class="pm-cat" id="pmCatEcon" onclick="filtPoly('ECONOMY',this)">ECONOMY</div>
       <div class="pm-cat" id="pmCatPol" onclick="filtPoly('POLITICS',this)">POLITICS</div>
@@ -1013,7 +1041,7 @@ const STATE = {
   trade_outcomes: { entries: [], per_signal: {} },
   loop_stats: { total_trades:0, winning_trades:0, win_rate:null, signal_weight_version:1 },
   // scoreboard
-  scoreboard: { CRYPTO:0, ECONOMY:0, POLITICS:0, GEO:0, TECH:0 },
+  scoreboard: { CRYPTO:0, ECONOMY:0, POLITICS:0, GEO:0, TECH:0, SPORTS:0 },
   // runtime
   key:'', running:false, timer:null, nextMs:0,
   markets:[], polyMarkets:[], cycle:0, analyzed:0, buys:0, noTrades:0,
@@ -1279,6 +1307,7 @@ function runWeightUpdate() {
 // LOAD MARKETS — Polymarket API first, fallback to local DB
 // ═══════════════════════════════════════════════════════════════
 const LOCAL_MARKETS = [
+  {q:'Will Illinois beat Houston tonight? (NCAA Tournament)',prob:0.37,vol:890000,cat:'SPORTS',cl:null,ctx:'Illinois priced ~37% on Polymarket (edge window <40%). Houston YES >65% likely inflated by home-court narrative. Sharps, Vegas line, CBS, Fox, and Las Vegas Sun analysts all backing Illinois +3.5. Flat stake recommended — do not chase earlier wins.'},
   {q:'Will Bitcoin exceed $120,000 before June 2026?',prob:0.63,vol:2300000,cat:'CRYPTO',cl:'BTC',ctx:'BTC at $87K. ETF inflows record. Post-halving cycle.'},
   {q:'Will Bitcoin hit $100K before April 2026?',prob:0.74,vol:5800000,cat:'CRYPTO',cl:'BTC',ctx:'Only 15% from target. Historical pattern supports.'},
   {q:'Will Ethereum reach $5,000 before July 2026?',prob:0.40,vol:920000,cat:'CRYPTO',cl:'ETH',ctx:'ETH at $2400. 108% rally needed.'},
