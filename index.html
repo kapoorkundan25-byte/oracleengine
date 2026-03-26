@@ -167,6 +167,38 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 #feed{flex:1;overflow-y:auto;padding:5px;display:flex;flex-direction:column;gap:4px;}
 #feed::-webkit-scrollbar{width:2px;}
 
+/* ═══ POLYMARKET ANALYSER ═══ */
+#polyToolbar{display:none;padding:5px 8px;border-bottom:1px solid var(--b1);flex-shrink:0;background:var(--s1);align-items:center;flex-wrap:wrap;gap:3px;}
+#polyAnalyser{flex:1;overflow-y:auto;padding:5px;display:none;flex-direction:column;gap:2px;}
+#polyAnalyser::-webkit-scrollbar{width:2px;}
+.pm-cat{padding:2px 5px;font-family:'JetBrains Mono';font-size:6px;letter-spacing:1px;border:1px solid var(--b1);color:var(--m);cursor:pointer;transition:all .15s;}
+.pm-cat.on{border-color:var(--c);color:var(--c);background:var(--c3);}
+.pm-refresh{padding:2px 6px;font-family:'JetBrains Mono';font-size:6px;border:1px solid var(--c);color:var(--c);background:var(--c3);cursor:pointer;letter-spacing:1px;transition:all .15s;}
+.pm-refresh:hover{background:rgba(0,212,255,.18);}
+.pm-pstatus{font-family:'JetBrains Mono';font-size:6px;color:var(--m);margin-left:auto;}
+.pm-row{padding:6px 8px;border:1px solid var(--b1);background:var(--s1);animation:cardIn .25s ease;cursor:pointer;transition:border-color .15s;}
+.pm-row:hover{border-color:var(--c);}
+.pm-row.pm-analyzed{border-left:2px solid var(--g);}
+.pm-q{font-size:9px;font-weight:600;color:var(--w);line-height:1.3;margin-bottom:4px;}
+.pm-bar-row{display:flex;align-items:center;gap:4px;margin-bottom:3px;}
+.pm-bar-wrap{flex:1;height:5px;background:var(--dim);overflow:hidden;position:relative;}
+.pm-bar-yes{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--g),var(--g2));transition:width .5s;}
+.pm-bar-no{position:absolute;top:0;right:0;height:100%;background:linear-gradient(270deg,var(--r),rgba(255,45,85,.4));transition:width .5s;}
+.pm-pct{font-family:'Syne';font-size:9px;font-weight:700;white-space:nowrap;}
+.pm-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:3px;}
+.pm-stat{text-align:center;padding:2px 3px;border:1px solid var(--b1);background:var(--s2);}
+.pm-sl{font-family:'JetBrains Mono';font-size:5px;color:var(--m);margin-bottom:1px;}
+.pm-sv{font-family:'Syne';font-size:10px;font-weight:700;}
+.pm-meta{display:flex;gap:3px;flex-wrap:wrap;align-items:center;}
+.pm-cat-badge{padding:1px 4px;font-family:'JetBrains Mono';font-size:5px;border:1px solid;letter-spacing:1px;}
+.pm-live-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.pm-live-dot.live{background:var(--g);animation:blink 1s infinite;}
+.pm-live-dot.local{background:var(--m);}
+.pm-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;color:var(--m);font-family:'JetBrains Mono';font-size:7px;line-height:2;}
+.fht{padding:2px 7px;font-family:'JetBrains Mono';font-size:7px;letter-spacing:1px;border:1px solid var(--b1);color:var(--m);cursor:pointer;transition:all .15s;}
+.fht.on{border-color:var(--c);color:var(--c);background:var(--c3);}
+.fht:hover{border-color:var(--c);}
+
 /* analysis card */
 .ac{border:1px solid var(--b2);background:var(--s1);animation:cardIn 0.3s ease;position:relative;overflow:hidden;}
 .ac::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--g),var(--c),var(--p));background-size:200%;animation:shimmer 4s linear infinite;}
@@ -550,19 +582,41 @@ canvas#cryptoChart{display:block;width:100%!important;}
     <div id="queue"></div>
   </div>
 
-  <!-- CENTER: ANALYSIS FEED -->
+  <!-- CENTER: ANALYSIS FEED + POLYMARKET ANALYSER -->
   <div id="panC" class="pnl">
     <div class="fh">
-      <div class="fh-t">QUANT ANALYSIS FEED</div>
-      <div class="ftabs">
-        <div class="ft on" onclick="filt('all',this)">ALL</div>
-        <div class="ft" onclick="filt('yes',this)">YES</div>
-        <div class="ft" onclick="filt('no',this)">NO</div>
-        <div class="ft" onclick="filt('strong',this)">≥70</div>
-        <div class="ft" onclick="filt('e10',this)">EDGE≥10</div>
-        <div class="ft" onclick="filt('nt',this)">NO TRADE</div>
-        <div class="ft" onclick="filt('probe',this)">PROBE</div>
+      <div id="fhTitle" class="fh-t">QUANT ANALYSIS FEED</div>
+      <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+        <div style="display:flex;gap:2px;margin-right:4px;flex-shrink:0;">
+          <div class="fht on" id="fhtFeed" onclick="switchCenterView('feed')">ANALYSIS FEED</div>
+          <div class="fht" id="fhtPoly" onclick="switchCenterView('poly')">⬡ POLY ANALYSER</div>
+        </div>
+        <div class="ftabs" id="feedFilterTabs">
+          <div class="ft on" onclick="filt('all',this)">ALL</div>
+          <div class="ft" onclick="filt('yes',this)">YES</div>
+          <div class="ft" onclick="filt('no',this)">NO</div>
+          <div class="ft" onclick="filt('strong',this)">≥70</div>
+          <div class="ft" onclick="filt('e10',this)">EDGE≥10</div>
+          <div class="ft" onclick="filt('nt',this)">NO TRADE</div>
+          <div class="ft" onclick="filt('probe',this)">PROBE</div>
+        </div>
       </div>
+    </div>
+    <!-- POLYMARKET ANALYSER TOOLBAR -->
+    <div id="polyToolbar">
+      <div class="pm-cat on" id="pmCatAll" onclick="filtPoly('ALL',this)">ALL</div>
+      <div class="pm-cat" id="pmCatCrypto" onclick="filtPoly('CRYPTO',this)">CRYPTO</div>
+      <div class="pm-cat" id="pmCatEcon" onclick="filtPoly('ECONOMY',this)">ECONOMY</div>
+      <div class="pm-cat" id="pmCatPol" onclick="filtPoly('POLITICS',this)">POLITICS</div>
+      <div class="pm-cat" id="pmCatGeo" onclick="filtPoly('GEO',this)">GEO</div>
+      <div class="pm-cat" id="pmCatTech" onclick="filtPoly('TECH',this)">TECH</div>
+      <div class="pm-cat" id="pmCatOther" onclick="filtPoly('OTHER',this)">OTHER</div>
+      <span class="pm-pstatus" id="pmStatus">0 markets</span>
+      <button class="pm-refresh" onclick="refreshPolyAnalyser()">⟳ REFRESH</button>
+    </div>
+    <!-- POLYMARKET ANALYSER PANEL -->
+    <div id="polyAnalyser">
+      <div class="pm-empty">⬡<br><br>Click ⟳ LOAD in the Scanner panel<br>to fetch live Polymarket markets.</div>
     </div>
     <div id="feed">
       <div class="empty-f" id="emptyEl">
@@ -1271,11 +1325,129 @@ async function loadMarkets() {
     toast('info', 'Local Markets Loaded', `${STATE.markets.length} curated markets · Gamma API unavailable from browser (CORS)`, 'info');
   }
   renderQueue();
+  renderPolyAnalyser();
   updateOBPanel();
 }
 
 // ═══════════════════════════════════════════════════════════════
-// RENDER QUEUE
+// POLYMARKET ANALYSER — dedicated browsable panel
+// ═══════════════════════════════════════════════════════════════
+let _polyViewCat = 'ALL';
+
+function switchCenterView(view) {
+  const feed = document.getElementById('feed');
+  const polyPanel = document.getElementById('polyAnalyser');
+  const polyToolbar = document.getElementById('polyToolbar');
+  const feedTabs = document.getElementById('feedFilterTabs');
+  const fhTitle = document.getElementById('fhTitle');
+  const fhtFeed = document.getElementById('fhtFeed');
+  const fhtPoly = document.getElementById('fhtPoly');
+  if (view === 'poly') {
+    feed.style.display = 'none';
+    feedTabs.style.display = 'none';
+    polyPanel.style.display = 'flex';
+    polyToolbar.style.display = 'flex';
+    fhTitle.textContent = '⬡ POLYMARKET ANALYSER';
+    fhtFeed.classList.remove('on');
+    fhtPoly.classList.add('on');
+    renderPolyAnalyser();
+  } else {
+    feed.style.display = 'flex';
+    feedTabs.style.display = 'flex';
+    polyPanel.style.display = 'none';
+    polyToolbar.style.display = 'none';
+    fhTitle.textContent = 'QUANT ANALYSIS FEED';
+    fhtFeed.classList.add('on');
+    fhtPoly.classList.remove('on');
+  }
+}
+
+function filtPoly(cat, el) {
+  _polyViewCat = cat;
+  document.querySelectorAll('.pm-cat').forEach(e => e.classList.remove('on'));
+  el.classList.add('on');
+  renderPolyAnalyser();
+}
+
+async function refreshPolyAnalyser() {
+  const btn = document.querySelector('.pm-refresh');
+  if (btn) { btn.textContent = '⟳ LOADING...'; btn.style.pointerEvents = 'none'; }
+  await fetchPolymarketMarkets();
+  if (STATE.polyMarkets.length > 0) STATE.markets = STATE.polyMarkets;
+  renderQueue();
+  renderPolyAnalyser();
+  if (btn) { btn.textContent = '⟳ REFRESH'; btn.style.pointerEvents = ''; }
+}
+
+function renderPolyAnalyser() {
+  const panel = document.getElementById('polyAnalyser');
+  if (!panel) return;
+  const markets = STATE.markets || [];
+  const filtered = _polyViewCat === 'ALL' ? markets : markets.filter(m => (m.cat || 'OTHER') === _polyViewCat);
+  const liveCount = markets.filter(m => m.isLive).length;
+  const statusEl = document.getElementById('pmStatus');
+  if (statusEl) statusEl.textContent = filtered.length + ' market' + (filtered.length !== 1 ? 's' : '') + (liveCount > 0 ? ' · LIVE' : ' · LOCAL');
+  if (!filtered.length) {
+    panel.innerHTML = '<div class="pm-empty">⬡<br><br>No markets loaded.<br>Click ⟳ LOAD in Scanner → then ⟳ REFRESH here.</div>';
+    return;
+  }
+  const catColors = {CRYPTO:'var(--g)',ECONOMY:'var(--y)',POLITICS:'var(--o)',GEO:'var(--r)',TECH:'var(--c)',OTHER:'var(--m)'};
+  panel.innerHTML = filtered.map((m) => {
+    const yes = Math.round((m.prob || 0.5) * 100);
+    const no = 100 - yes;
+    const vol = m.vol >= 1e6 ? '$' + (m.vol/1e6).toFixed(1) + 'M' : m.vol >= 1e3 ? '$' + (m.vol/1e3).toFixed(0) + 'K' : m.vol ? '$' + m.vol : '—';
+    const vol24 = m.vol24h ? (m.vol24h >= 1e6 ? '$' + (m.vol24h/1e6).toFixed(1) + 'M' : '$' + (m.vol24h/1e3).toFixed(0) + 'K') : '—';
+    const spread = m.bestBid && m.bestAsk ? ((m.bestAsk - m.bestBid) * 100).toFixed(1) + '¢' : '—';
+    const chgRaw = m.oneDayPriceChange ? (m.oneDayPriceChange * 100) : null;
+    const chgTxt = chgRaw !== null ? (chgRaw > 0 ? '+' : '') + chgRaw.toFixed(1) + '%' : '—';
+    const chgColor = chgRaw > 0 ? 'var(--g)' : chgRaw < 0 ? 'var(--r)' : 'var(--m)';
+    const edgeRaw = m.edge;
+    const edgeTxt = edgeRaw !== null && edgeRaw !== undefined ? (edgeRaw > 0 ? '+' : '') + (edgeRaw * 100).toFixed(1) + '%' : '—';
+    const edgeColor = edgeRaw > 0.05 ? 'var(--g)' : edgeRaw < -0.05 ? 'var(--r)' : 'var(--m)';
+    const catColor = catColors[m.cat || 'OTHER'] || 'var(--m)';
+    const isLive = !!m.isLive;
+    const isAnalyzed = !!m.analysis;
+    const realIdx = STATE.markets.indexOf(m);
+    return `<div class="pm-row${isAnalyzed ? ' pm-analyzed' : ''}" onclick="queuePolyMarket(${realIdx})">
+      <div class="pm-q">${m.q || 'Unknown market'}</div>
+      <div class="pm-bar-row">
+        <span style="font-family:'JetBrains Mono';font-size:5px;color:var(--g);width:18px">YES</span>
+        <div class="pm-bar-wrap">
+          <div class="pm-bar-yes" style="width:${yes}%"></div>
+          <div class="pm-bar-no" style="width:${no}%"></div>
+        </div>
+        <span class="pm-pct" style="color:var(--g)">${yes}%</span>
+        <span style="font-family:'JetBrains Mono';font-size:5px;color:var(--r);width:18px;text-align:right">NO</span>
+        <span class="pm-pct" style="color:var(--r)">${no}%</span>
+      </div>
+      <div class="pm-stats">
+        <div class="pm-stat"><div class="pm-sl">VOL</div><div class="pm-sv" style="color:var(--c)">${vol}</div></div>
+        <div class="pm-stat"><div class="pm-sl">VOL 24H</div><div class="pm-sv" style="color:var(--t)">${vol24}</div></div>
+        <div class="pm-stat"><div class="pm-sl">SPREAD</div><div class="pm-sv" style="color:var(--y)">${spread}</div></div>
+        <div class="pm-stat"><div class="pm-sl">24H CHG</div><div class="pm-sv" style="color:${chgColor}">${chgTxt}</div></div>
+        <div class="pm-stat"><div class="pm-sl">EDGE</div><div class="pm-sv" style="color:${edgeColor}">${edgeTxt}</div></div>
+      </div>
+      <div class="pm-meta">
+        <div class="pm-live-dot ${isLive ? 'live' : 'local'}" title="${isLive ? 'Live Polymarket data' : 'Local fallback data'}"></div>
+        <span class="pm-cat-badge" style="color:${catColor};border-color:${catColor}40">${m.cat || 'OTHER'}</span>
+        ${isAnalyzed ? '<span style="padding:1px 4px;font-family:JetBrains Mono;font-size:5px;color:var(--g);border:1px solid rgba(0,255,179,0.2);background:rgba(0,255,179,0.05)">✓ ANALYZED</span>' : ''}
+        ${m.rec ? `<span style="padding:1px 5px;font-family:Syne;font-size:7px;font-weight:700;${m.rec==='YES'?'color:#000;background:var(--g)':m.rec==='NO'?'color:#fff;background:var(--r)':'color:#000;background:var(--m)'}">${m.rec}</span>` : ''}
+        <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:5px;color:var(--m)">click to analyse →</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function queuePolyMarket(idx) {
+  if (idx < 0 || idx >= STATE.markets.length) return;
+  const m = STATE.markets[idx];
+  if (!m) return;
+  switchCenterView('feed');
+  toast('info', 'Queued for Analysis', m.q.slice(0, 60), 'info');
+  manualAnalyze(idx);
+}
+
+
 // ═══════════════════════════════════════════════════════════════
 function renderQueue() {
   document.getElementById('qCnt').textContent = STATE.markets.length;
